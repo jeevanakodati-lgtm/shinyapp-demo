@@ -1,40 +1,48 @@
-# R/mod_meantrend.R
-
+#' Mean Trend Plot Module - UI
+#'
+#' @description
+#' UI for the Mean Trend module. Displays a line plot showing the mean
+#' value of a parameter over visits by treatment group. Includes a screenshot
+#' button to export the plot as PNG.
+#'
+#' @param id Module namespace ID
+#'
+#' @return A bslib card containing the mean trend plot interface
 meantrend_ui <- function(id) {
   ns <- shiny::NS(id)
-
   bslib::card(
     full_screen = TRUE,
-
     bslib::card_header(
-      "Mean Trend Plot"
-    ),
-
-    bslib::layout_column_wrap(
-      width = 1 / 3,
-
-      shiny::selectInput(
-        ns("param"),
-        "Parameter",
-        choices = NULL
-      ),
-
-      shiny::selectizeInput(
-        ns("trt"),
-        "Treatment",
-        choices = NULL,
-        multiple = TRUE
+      class = "d-flex justify-content-between align-items-center",
+      shiny::span("Mean Trend Plot"),
+      screenshot_button_ui(
+        target_id = ns("plot"),
+        filename = "mean_trend_plot.png"
       )
     ),
-
-    shiny::plotOutput(
-      ns("plot"),
-      height = "700px"
-    )
+    bslib::layout_column_wrap(
+      width = 1/3,
+      shiny::selectInput(ns("param"), "Parameter", choices = NULL),
+      shiny::selectizeInput(ns("trt"), "Treatment", choices = NULL, multiple = TRUE)
+    ),
+    shiny::plotOutput(ns("plot"), height = "700px")
   )
 }
 
-
+#' Mean Trend Plot Module - Server
+#'
+#' @description
+#' Server logic for the Mean Trend module. Calculates the mean value per visit
+#' and treatment, then renders an interactive line plot using ggplot2.
+#'
+#' @param id Module namespace ID
+#' @param data A reactive data frame containing the analysis dataset
+#' @param value_var Name of the analysis value column (default: "AVAL")
+#' @param param_var Name of the parameter column (default: "PARAM")
+#' @param visit_var Name of the visit column (default: "AVISIT")
+#' @param visit_num_var Name of the numeric visit order column (default: "AVISITN")
+#' @param trt_var Name of the treatment column (default: "TRTA")
+#' @param title Title prefix for the plot (default: "Mean Trend Plot")
 meantrend_server <- function(
     id,
     data,

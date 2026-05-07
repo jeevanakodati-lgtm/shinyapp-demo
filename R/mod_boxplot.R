@@ -1,31 +1,38 @@
-
+#' Box Plot Module - UI
+#'
+#' @description
+#' UI for the Box Plot module. Displays a box plot of vital signs or lab
+#' parameters by treatment and visit. Includes a screenshot button for easy
+#' export of the plot as PNG.
+#'
+#' @param id Module namespace ID
+#'
+#' @return A bslib card containing the box plot interface
 boxplot_ui <- function(id) {
-
   ns <- shiny::NS(id)
-
   bslib::card(
     full_screen = TRUE,
-
     bslib::card_header(
-      "Box Plot"
+      class = "d-flex justify-content-between align-items-center",
+      shiny::span("Box Plot"),
+      screenshot_button_ui(
+        target_id = ns("plot"),
+        filename = "boxplot.png"
+      )
     ),
-
     bslib::layout_column_wrap(
       width = 1 / 3,
-
       shiny::selectInput(
         ns("param"),
         "Parameter",
         choices = NULL
       ),
-
       shiny::selectizeInput(
         ns("visit"),
         "Visits",
         choices = NULL,
         multiple = TRUE
       ),
-
       shiny::selectizeInput(
         ns("trt"),
         "Treatment",
@@ -33,7 +40,6 @@ boxplot_ui <- function(id) {
         multiple = TRUE
       )
     ),
-
     shiny::plotOutput(
       ns("plot"),
       height = "700px"
@@ -41,7 +47,20 @@ boxplot_ui <- function(id) {
   )
 }
 
-
+#' Box Plot Module - Server
+#'
+#' @description
+#' Server logic for the Box Plot module. Filters data based on selected
+#' parameter, visits, and treatments, then renders a faceted box plot using
+#' ggplot2.
+#'
+#' @param id Module namespace ID
+#' @param data A reactive data frame containing the analysis dataset
+#' @param value_var Name of the value column (default: "AVAL")
+#' @param param_var Name of the parameter column (default: "PARAM")
+#' @param visit_var Name of the visit column (default: "AVISIT")
+#' @param trt_var Name of the treatment column (default: "TRTA")
+#' @param title Plot title (default: "Box Plot")
 boxplot_server <- function(
     id,
     data,

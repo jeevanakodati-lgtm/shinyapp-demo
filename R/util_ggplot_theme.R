@@ -1,5 +1,20 @@
-# R/custom_ggplot_theme.R
-
+#' Custom ggplot2 Theme for Clinical Visualizations
+#'
+#' @description
+#' A helper function that returns a consistent ggplot2 theme and color
+#' scales tailored for clinical trial visualizations. It applies a minimal
+#' theme with bold titles, angled x-axis labels, and predefined colors for
+#' the three treatment arms used in this app.
+#'
+#' @param treatment_scale Character string indicating which scale(s) to apply.
+#'   Options are "color", "fill", "both", or "none". Default is "color".
+#' @param base_size Base font size for the theme. Default is 14.
+#' @param legend_position Position of the legend. Default is "bottom".
+#'
+#' @return A ggplot2 theme object (and scale objects if treatment colors are applied)
+#'
+#' @examples
+#' ggplot(...) + custom_ggplot_theme(treatment_scale = "color")
 custom_ggplot_theme <- function(
     treatment_scale = c("color", "fill", "both", "none"),
     base_size = 14,
