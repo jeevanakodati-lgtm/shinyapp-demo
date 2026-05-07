@@ -1,32 +1,38 @@
-# R/mod_histogram.R
-
+#' Histogram Module - UI
+#'
+#' @description
+#' Creates the user interface for the Histogram module. Users can select a
+#' parameter, one or more visits, and treatments to view the distribution of
+#' values. Includes a camera button to download the plot as a PNG image.
+#'
+#' @param id Module namespace ID
+#'
+#' @return A `bslib::card` containing the histogram controls and plot output
 histogram_ui <- function(id) {
-
   ns <- shiny::NS(id)
-
   bslib::card(
     full_screen = TRUE,
-
     bslib::card_header(
-      "Histogram"
+      class = "d-flex justify-content-between align-items-center",
+      shiny::span("Histogram"),
+      screenshot_button_ui(
+        target_id = ns("hist_plot"),
+        filename = "histogram_plot.png"
+      )
     ),
-
     bslib::layout_column_wrap(
       width = 1 / 3,
-
       shiny::selectInput(
         ns("param"),
         "Parameter",
         choices = NULL
       ),
-
       shiny::selectizeInput(
         ns("visit"),
         "Visits",
         choices = NULL,
         multiple = TRUE
       ),
-
       shiny::selectizeInput(
         ns("trt"),
         "Treatment",
@@ -34,7 +40,6 @@ histogram_ui <- function(id) {
         multiple = TRUE
       )
     ),
-
     shiny::plotOutput(
       ns("hist_plot"),
       height = "700px"
@@ -42,7 +47,20 @@ histogram_ui <- function(id) {
   )
 }
 
-
+#' Histogram Module - Server
+#'
+#' @description
+#' Server function for the Histogram module. Handles dynamic filtering of
+#' parameters, visits, and treatments, then renders a faceted histogram using
+#' ggplot2.
+#'
+#' @param id Module namespace ID
+#' @param data Reactive data frame containing the source dataset
+#' @param value_var Variable name for the numeric values (default: "AVAL")
+#' @param param_var Variable name for the parameter (default: "PARAM")
+#' @param visit_var Variable name for the visit (default: "AVISIT")
+#' @param trt_var Variable name for treatment (default: "TRTA")
+#' @param title Title prefix for the plot (default: "Histogram")
 histogram_server <- function(
     id,
     data,

@@ -1,0 +1,52 @@
+span.navbar-brand {
+    font-size: 35px;
+    padding: 10px 20px 20px 20px;
+    font-weight: bold;
+}
+
+.home-page {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 20px 30px;
+  line-height: 1.7;
+}
+
+.home-page h2 {
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.home-page h4 {
+  margin-top: 30px;
+  font-weight: 700;
+  color: #2C3E50;
+}
+
+.home-page a {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.misc-page {
+  padding: 20px;
+}
+
+.uploaded-image-preview {
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e6e8eb;
+}
+
+.uploaded-image-preview h5 {
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.uploaded-image {
+  max-width: 100%;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 8px;
+  background: white;
+}
